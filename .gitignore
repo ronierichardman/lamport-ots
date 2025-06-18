@@ -24,13 +24,19 @@ verify-s89555
 
 # Key files (private keys should not be committed)
 *.priv
-lamport-ots.priv
+*.bin.priv
+
+# Public keys (if they are generated during the build process)
+*.pub
+*.bin.pub
 
 # Signature files (generated during testing)
 *.sign
+!document.jpg.sign
 
 # Test files (generated during testing)
-test*.txt
+*.txt
+!test.txt
 
 # Temporary files
 *~
