@@ -1,0 +1,73 @@
+# Compiled executables
+keygen-s89555
+sign-s89555
+verify-s89555
+
+# Object files
+*.o
+*.obj
+
+# Debug files
+*.dSYM/
+*.gch
+*.pch
+
+# Static libraries
+*.a
+*.lib
+
+# Shared libraries
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Key files (private keys should not be committed)
+*.priv
+lamport-ots.priv
+
+# Signature files (generated during testing)
+*.sign
+
+# Test files (generated during testing)
+test*.txt
+
+# Temporary files
+*~
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build directories
+build/
+dist/
+out/
+
+# Core dumps
+core
+core.*
+
+# OpenSSL build artifacts (if building locally)
+openssl-*/
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Backup files
+*.bak
+*.backup
+
+# Log files
+*.log
+
+archive/
