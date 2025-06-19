@@ -1,5 +1,5 @@
-#ifndef LAMPORT_H
-#define LAMPORT_H
+#ifndef LAMPORT_CONSTANTS_H
+#define LAMPORT_CONSTANTS_H
 
 // Lamport One-Time Signature Constants
 #define HASH_SIZE 32   // SHA-256 produces 32 bytes

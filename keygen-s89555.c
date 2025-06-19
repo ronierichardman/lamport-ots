@@ -1,3 +1,16 @@
+/*
+ * Lamport One-Time Signature Scheme
+ * Key Generation
+ * ==========================================================
+ * This program generates a key pair (private and public keys) for the Lamport one-time signature scheme.
+ * The private key is a set of random values, and the public key is derived from the private key using a hash function.
+ * The keys are written to files in both hex and binary formats.
+ *
+ * USAGE:
+ * Compile with: make keygen-s89555
+ * Run with: ./keygen-s89555 [-b]
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,55 +18,10 @@
 #include <openssl/sha.h>
 #include <openssl/evp.h>
 #include <sys/stat.h>
-#include "lamport.h"
+#include "lamport_constants.h"
 
-int write_hex_file(const char *filename, unsigned char data[NUM_BITS][2][KEY_SIZE]) {
-    FILE *file = fopen(filename, "w");
-    if (file == NULL) {
-        fprintf(stderr, "Error: Cannot create hex file %s\n", filename);
-        return 0;
-    }
-    // Set file permissions to 600 (read/write for owner only)
-    if (chmod(filename, S_IRUSR | S_IWUSR) != 0) {
-        fprintf(stderr, "Warning: Could not set secure permissions on private key file\n");
-    }
-    // Write each byte as two hex characters
-    for (int i = 0; i < NUM_BITS; i++) {
-        for (int j = 0; j < 2; j++) {
-            for (int k = 0; k < KEY_SIZE; k++) {
-                fprintf(file, "%02x", data[i][j][k]);
-            }
-            fprintf(file, "\n");
-        }
-    }
-    fclose(file);
-    return 1;
-}
-
-// not required, only for understanding purpose
-int write_binary_file(const char *filename, unsigned char data[NUM_BITS][2][KEY_SIZE]) {
-    FILE *file = fopen(filename, "wb");
-    if (file == NULL) {
-        fprintf(stderr, "Error: Cannot create binary file %s\n", filename);
-        return 0;
-    }
-    // Set file permissions to 600 (read/write for owner only)
-    if (chmod(filename, S_IRUSR | S_IWUSR) != 0) {
-        fprintf(stderr, "Warning: Could not set secure permissions on private key file\n");
-    }
-    // Write each key component as binary data
-    for (int i = 0; i < NUM_BITS; i++) {
-        for (int j = 0; j < 2; j++) {
-            if (fwrite(data[i][j], sizeof(unsigned char), KEY_SIZE, file) != KEY_SIZE) {
-                fprintf(stderr, "Error: Failed to write binary data to file %s\n", filename);
-                fclose(file);
-                return 0;
-            }
-        }
-    }
-    fclose(file);
-    return 1;
-}
+int write_hex_file(const char *filename, int owner_only, unsigned char data[NUM_BITS][2][KEY_SIZE]);
+int write_binary_file(const char *filename, int owner_only, unsigned char data[NUM_BITS][2][KEY_SIZE]);
 
 int main(int argc, char *argv[]) {
     unsigned char private_key[NUM_BITS][2][KEY_SIZE];
@@ -113,81 +81,15 @@ int main(int argc, char *argv[]) {
     EVP_MD_CTX_free(mdctx);
 
     // Write private key to hex file
-    if (!write_hex_file(PRIV_FILE_NAME, private_key)) {
+    if (!write_hex_file(PRIV_FILE_NAME, 1, private_key))
+    {
         return 1;
     }
     // Write public key to hex file
-    if (!write_hex_file(PUB_FILE_NAME, public_key)) {
+    if (!write_hex_file(PUB_FILE_NAME, 0, public_key))
+    {
         return 1;
     }
-    
-    // // Write private key to file
-    // priv_file = fopen(PRIV_FILE_NAME, "w");
-    // if (priv_file == NULL) {
-    //     fprintf(stderr, "Error: Cannot create private key file\n");
-    //     return 1;
-    // }
-    
-    // // Set file permissions to 600 (read/write for owner only)
-    // if (chmod(PRIV_FILE_NAME, S_IRUSR | S_IWUSR) != 0) {
-    //     fprintf(stderr, "Warning: Could not set secure permissions on private key file\n");
-    // }
-    
-    // // Write private key: each line contains exactly 32 bytes (64 hex chars) + newline
-    // for (i = 0; i < NUM_BITS; i++) {
-    //     for (j = 0; j < 2; j++) {
-    //         for (k = 0; k < KEY_SIZE; k++) {
-    //             fprintf(priv_file, "%02x", private_key[i][j][k]);
-    //         }
-    //         fprintf(priv_file, "\n");
-    //     }
-    // }
-    // fclose(priv_file);
-    
-    // // Write public key to file
-    // pub_file = fopen(PUB_FILE_NAME, "w");
-    // if (pub_file == NULL) {
-    //     fprintf(stderr, "Error: Cannot create public key file\n");
-    //     return 1;
-    // }
-
-    
-    // // Write public key: each line contains exactly 32 bytes (64 hex chars) + newline
-    // for (i = 0; i < NUM_BITS; i++) {
-    //     for (j = 0; j < 2; j++) {
-    //         for (k = 0; k < KEY_SIZE; k++) {
-    //             fprintf(pub_file, "%02x", public_key[i][j][k]);
-    //         }
-    //         fprintf(pub_file, "\n");
-    //     }
-    // }
-    // fclose(pub_file);
-
-    // // Write private key to binary file 
-    // FILE *priv_binary_file = fopen(PRIV_BINARY_FILE_NAME, "wb");
-    // if (priv_binary_file == NULL) {
-    //     fprintf(stderr, "Error: Cannot create private key binary file\n");
-    //     return 1;
-    // }
-    // for (i = 0; i < NUM_BITS; i++) {
-    //     for (j = 0; j < 2; j++) {
-    //         fwrite(private_key[i][j], 1, KEY_SIZE, priv_binary_file);
-    //     }
-    // }
-    // fclose(priv_binary_file);
-
-    // // Write public key to binary file 
-    // FILE *pub_binary_file = fopen(PUB_BINARY_FILE_NAME, "wb");
-    // if (pub_binary_file == NULL) {
-    //     fprintf(stderr, "Error: Cannot create public key binary file\n");
-    //     return 1;
-    // }
-    // for (i = 0; i < NUM_BITS; i++) {
-    //     for (j = 0; j < 2; j++) {
-    //         fwrite(public_key[i][j], 1, KEY_SIZE, pub_binary_file);
-    //     }
-    // }
-    // fclose(pub_binary_file);
 
     printf("Lamport one-time signature key pair generated successfully.\n");
     printf("Private key: %s\n", PRIV_FILE_NAME);
@@ -196,15 +98,81 @@ int main(int argc, char *argv[]) {
     // Optionally, if the -b option is provided, write binary files (not required)
     if (argc > 1 && strcmp(argv[1], "-b") == 0) {
         // Write private key to binary file
-        if (!write_binary_file(PRIV_BINARY_FILE_NAME, private_key)) {
+        if (!write_binary_file(PRIV_BINARY_FILE_NAME, 1, private_key))
+        {
             return 1;
         }
         // Write public key to binary file
-        if (!write_binary_file(PUB_BINARY_FILE_NAME, public_key)) {
+        if (!write_binary_file(PUB_BINARY_FILE_NAME, 0, public_key))
+        {
             return 1;
         }
         printf("Binary files created: %s and %s\n", PRIV_BINARY_FILE_NAME, PUB_BINARY_FILE_NAME);
     }
 
     return 0;
+}
+
+int write_hex_file(const char *filename, int owner_only, unsigned char data[NUM_BITS][2][KEY_SIZE])
+{
+    FILE *file = fopen(filename, "w");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Cannot create hex file %s\n", filename);
+        return 0;
+    }
+    // Set file permissions to 600 (read/write for owner only)
+    if (owner_only && chmod(filename, S_IRUSR | S_IWUSR) != 0)
+    {
+        fprintf(stderr, "Warning: Could not set secure permissions on file: %s\n", filename);
+        fclose(file);
+        return 0;
+    }
+    // Write each byte as two hex characters
+    for (int i = 0; i < NUM_BITS; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            for (int k = 0; k < KEY_SIZE; k++)
+            {
+                fprintf(file, "%02x", data[i][j][k]);
+            }
+            fprintf(file, "\n");
+        }
+    }
+    fclose(file);
+    return 1;
+}
+
+// not required, only for understanding purpose
+int write_binary_file(const char *filename, int owner_only, unsigned char data[NUM_BITS][2][KEY_SIZE])
+{
+    FILE *file = fopen(filename, "wb");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Cannot create binary file %s\n", filename);
+        return 0;
+    }
+    // Set file permissions to 600 (read/write for owner only)
+    if (owner_only && chmod(filename, S_IRUSR | S_IWUSR) != 0)
+    {
+        fprintf(stderr, "Warning: Could not set secure permissions on file: %s\n", filename);
+        fclose(file);
+        return 0;
+    }
+    // Write each key component as binary data
+    for (int i = 0; i < NUM_BITS; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            if (fwrite(data[i][j], sizeof(unsigned char), KEY_SIZE, file) != KEY_SIZE)
+            {
+                fprintf(stderr, "Error: Failed to write binary data to file %s\n", filename);
+                fclose(file);
+                return 0;
+            }
+        }
+    }
+    fclose(file);
+    return 1;
 }
