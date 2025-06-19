@@ -17,7 +17,7 @@
 #define SIGN_BINARY_EXTENSION ".bin.sign" // not required, only for understanding purpose
 
 // Debug mode control
-#define DEBUG_MODE 1   // 1: enable debug output, 0: disable
+#define DEBUG_MODE 0 // 1: enable debug output, 0: disable
 
 // Debug macro for conditional printing
 #if DEBUG_MODE

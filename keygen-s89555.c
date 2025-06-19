@@ -144,7 +144,7 @@ int write_hex_file(const char *filename, int owner_only, unsigned char data[NUM_
     return 1;
 }
 
-// not required, only for understanding purpose
+// not required
 int write_binary_file(const char *filename, int owner_only, unsigned char data[NUM_BITS][2][KEY_SIZE])
 {
     FILE *file = fopen(filename, "wb");
