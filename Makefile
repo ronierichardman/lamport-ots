@@ -20,9 +20,10 @@ verify-s89555: verify-s89555.c lamport_common.h $(COMMON_OBJ)
 	$(CC) $(CFLAGS) -o $@ $< $(COMMON_OBJ) $(LDFLAGS)
 
 clean:
-	rm -f $(TARGETS) $(COMMON_OBJ) *.pub *.priv *.sign test*.txt *.jpg
+	rm -f $(TARGETS) $(COMMON_OBJ) *.pub *.priv *.sign *.txt *.jpg 
 
 test: all
-	bash test.sh
+	chmod +x test.sh
+	./test.sh
 
 .PHONY: all clean test
