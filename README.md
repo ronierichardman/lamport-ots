@@ -12,9 +12,9 @@ This implementation of the Lamport One-Time Signature scheme consists of three C
 
 ```
 lamport-ots/
-├── keygen-s89555.c         # Key pair generation program
-├── sign-s89555.c           # Document signing program  
-├── verify-s89555.c         # Signature verification program
+├── keygen-sxxxxx.c         # Key pair generation program
+├── sign-sxxxxx.c           # Document signing program  
+├── verify-sxxxxx.c         # Signature verification program
 ├── lamport_constants.h     # Constants and definitions
 ├── lamport_common.h        # Common function declarations
 ├── lamport_common.c        # Shared utility functions
@@ -37,16 +37,16 @@ make all
 
 Or individually:
 ```bash
-make keygen-s89555
-make sign-s89555
-make verify-s89555
+make keygen-sxxxxx
+make sign-sxxxxx
+make verify-sxxxxx
 ```
 
 Manual compilation:
 ```bash
-gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o keygen-s89555 keygen-s89555.c -L./openssl-3.5.0 -lcrypto
-gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o sign-s89555 sign-s89555.c lamport_common.o -L./openssl-3.5.0 -lcrypto
-gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o verify-s89555 verify-s89555.c lamport_common.o -L./openssl-3.5.0 -lcrypto
+gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o keygen-sxxxxx keygen-sxxxxx.c -L./openssl-3.5.0 -lcrypto
+gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o sign-sxxxxx sign-sxxxxx.c lamport_common.o -L./openssl-3.5.0 -lcrypto
+gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o verify-sxxxxx verify-sxxxxx.c lamport_common.o -L./openssl-3.5.0 -lcrypto
 ```
 
 ## Usage
@@ -54,7 +54,7 @@ gcc -Wall -Wextra -std=c99 -g -I. -I./openssl-3.5.0/include -o verify-s89555 ver
 ### 1. Generate Key Pair
 
 ```bash
-./keygen-s89555
+./keygen-sxxxxx
 ```
 
 Creates the files:
@@ -63,7 +63,7 @@ Creates the files:
 
 Optional binary format:
 ```bash
-./keygen-s89555 -b
+./keygen-sxxxxx -b
 ```
 
 Additionally creates:
@@ -73,19 +73,19 @@ Additionally creates:
 ### 2. Sign Document
 
 ```bash
-./sign-s89555 <filename>
+./sign-sxxxxx <filename>
 ```
 
 Example:
 ```bash
-./sign-s89555 document.txt
+./sign-sxxxxx document.txt
 ```
 
 Creates the signature file `document.txt.sign`.
 
 Optional binary signature:
 ```bash
-./sign-s89555 document.txt -b
+./sign-sxxxxx document.txt -b
 ```
 
 Additionally creates `document.txt.bin.sign` using binary keys.
@@ -93,12 +93,12 @@ Additionally creates `document.txt.bin.sign` using binary keys.
 ### 3. Verify Signature
 
 ```bash
-./verify-s89555 <filename>
+./verify-sxxxxx <filename>
 ```
 
 Example:
 ```bash
-./verify-s89555 document.txt
+./verify-sxxxxx document.txt
 ```
 
 Output:
@@ -149,9 +149,9 @@ The test suite performs:
 
 ## Files
 
-- `keygen-s89555.c` - Key pair generation
-- `sign-s89555.c` - Signature creation
-- `verify-s89555.c` - Signature verification
+- `keygen-sxxxxx.c` - Key pair generation
+- `sign-sxxxxx.c` - Signature creation
+- `verify-sxxxxx.c` - Signature verification
 - `lamport_common.h` - Common header file
 - `lamport_common.c` - Shared utility functions
 - `lamport_constants.h` - Constants and definitions
@@ -177,7 +177,7 @@ make clean
 ```
 
 Removes all generated files:
-- Executables (`keygen-s89555`, `sign-s89555`, `verify-s89555`)
+- Executables (`keygen-sxxxxx`, `sign-sxxxxx`, `verify-sxxxxx`)
 - Object files (`lamport_common.o`)
 - Key files (`*.pub`, `*.priv`)
 - Signature files (`*.sign`)
@@ -195,7 +195,7 @@ The programs include comprehensive error checking for:
 
 ## Development Notes
 
-- **Student ID**: s89555 
+- **Student ID**: sxxxxx 
 - **Course**: Information Security (IS) 
 - **Semester**: 1st Semester
 - **Implementation**: C with OpenSSL library
@@ -206,17 +206,17 @@ The programs include comprehensive error checking for:
 ```bash
 # Complete workflow example
 make all                          # Compile all programs
-./keygen-s89555                   # Generate key pair
-./sign-s89555 document.pdf        # Sign a PDF file
-./verify-s89555 document.pdf      # Verify the signature
+./keygen-sxxxxx                   # Generate key pair
+./sign-sxxxxx document.pdf        # Sign a PDF file
+./verify-sxxxxx document.pdf      # Verify the signature
 
 # Binary format workflow
-./keygen-s89555 -b               # Generate keys in both formats
-./sign-s89555 image.jpg -b       # Sign with binary format
-./verify-s89555 image.jpg -b     # Verify with binary public key
+./keygen-sxxxxx -b               # Generate keys in both formats
+./sign-sxxxxx image.jpg -b       # Sign with binary format
+./verify-sxxxxx image.jpg -b     # Verify with binary public key
 
 # Debug output (if DEBUG_MODE=1)
-./sign-s89555 test.txt > output.txt 2> errors.txt
+./sign-sxxxxx test.txt > output.txt 2> errors.txt
 ```
 
 ## License
